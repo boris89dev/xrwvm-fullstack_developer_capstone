@@ -114,9 +114,20 @@ def get_dealer_details(request, dealer_id):
     if(dealer_id):
         endpoint = "/fetchDealer/"+str(dealer_id)
         dealership = get_request(endpoint)
-        return JsonResponse({"status":200,"dealer":dealership})
+
+        # se dealership è un singolo oggetto
+        if isinstance(dealership, dict):
+            dealership["full_name"] = f"{dealership.get('first_name', '')} {dealership.get('last_name', '')}"
+            return JsonResponse({"status": 200, "dealer": [dealership]})  # restituisco una lista con 1 elemento
+        elif isinstance(dealership, list) and len(dealership) > 0:
+            for d in dealership:
+                d["full_name"] = f"{d.get('first_name', '')} {d.get('last_name', '')}"
+            return JsonResponse({"status": 200, "dealer": dealership})
+        else:
+            return JsonResponse({"status": 404, "message": "Dealer not found"})
     else:
         return JsonResponse({"status":400,"message":"Bad Request"})
+    return JsonResponse({"status":400,"message":"Bad Request"})
 
 # Create a `add_review` view to submit a review
 def add_review(request):
