@@ -5,18 +5,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-backend_url = os.getenv(
-    'backend_url', default="http://localhost:3030")
+backend_url = os.getenv("backend_url", default="http://localhost:3030")
 sentiment_analyzer_url = os.getenv(
-    'sentiment_analyzer_url',
-    default="http://localhost:5050/")
+    "sentiment_analyzer_url", default="http://localhost:5050/"
+)
 
 # def get_request(endpoint, **kwargs):
 
 
 def get_request(endpoint, **kwargs):
     params = ""
-    if (kwargs):
+    if kwargs:
         for key, value in kwargs.items():
             params = params + key + "=" + value + "&"
 
@@ -41,6 +40,7 @@ def analyze_review_sentiments(text):
     except Exception as err:
         print(f"Unexpected {err=}, {type(err)=}")
         print("Network exception occurred")
+
 
 # request_url = sentiment_analyzer_url+"analyze/"+text
 # Add code for retrieving sentiments
